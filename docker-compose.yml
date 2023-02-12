@@ -1,0 +1,30 @@
+version: "3"
+services:
+  express:
+    build: ./server
+    ports:
+      - "8000:8000"
+    environment:
+      USERNAME: postgres
+      PASSWORD: password
+      HOST: db
+      DBPORT: 5432
+    command: npm start
+  react:
+    build: ./client
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_SERVERURL: http://localhost:8000
+    command: npm start
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - type: bind
+        source: /var/lib/docker/volumes/1161ca583e8453feb522b9c01bba7ac9cbe61195d9bc4304a59f020591b45822/_data
+        target: /var/lib/postgresql/data
